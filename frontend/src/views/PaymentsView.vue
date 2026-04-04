@@ -708,25 +708,64 @@ const paymentsTotalAmount = computed(() =>
 
 .tabs {
   display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: 10px;
+  gap: 8px;
+  margin-bottom: 24px;
+  background: linear-gradient(145deg, #eef2f6, #f8fafc);
+  padding: 6px;
+  border-radius: 16px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
+
 .tab {
   flex: 1;
-  padding: 10px;
+  padding: 14px 20px;
   border: none;
   background: transparent;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
+  font-weight: 600;
+  font-size: 15px;
+  color: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+  }
+  
+  &:hover {
+    color: #475569;
+    transform: translateY(-1px);
+    
+    &::before {
+      opacity: 1;
+    }
+  }
+  
   &.active {
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    color: var(--primary);
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    box-shadow: 
+      0 4px 12px rgba(99, 102, 241, 0.4),
+      0 2px 6px rgba(139, 92, 246, 0.3);
+    transform: translateY(0);
+    
+    &::before {
+      opacity: 0;
+    }
   }
 }
 
