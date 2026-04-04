@@ -9,8 +9,33 @@ from app.models.plot import Plot
 from app.models.user import UserRole
 from app.schemas.appeal import AppealCreate, AppealResponse, AppealRespond
 from app.schemas.common import PaginatedResponse
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/appeals", tags=["appeals"])
+
+
+class AppealStats(BaseModel):
+    new_count: int
+    in_progress_count: int
+
+
+@router.get("/stats", response_model=AppealStats)
+async def get_appeal_stats(
+    db: DB,
+    current_user: StaffUser,
+):
+    """Получить статистику по обращениям (для бейджей)"""
+    new_result = await db.execute(
+        select(func.count(Appeal.id)).where(Appeal.status == AppealStatus.NEW)
+    )
+    new_count = new_result.scalar() or 0
+    
+    in_progress_result = await db.execute(
+        select(func.count(Appeal.id)).where(Appeal.status == AppealStatus.IN_PROGRESS)
+    )
+    in_progress_count = in_progress_result.scalar() or 0
+    
+    return AppealStats(new_count=new_count, in_progress_count=in_progress_count)
 
 
 @router.get("", response_model=PaginatedResponse[AppealResponse])

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Query
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import Optional, List
 from datetime import datetime
 
@@ -8,8 +8,27 @@ from app.models.meter import MeterReading
 from app.models.plot import Plot
 from app.models.user import UserRole
 from app.schemas.meter import MeterReadingCreate, MeterReadingResponse
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/meters", tags=["meters"])
+
+
+class MeterStats(BaseModel):
+    unverified_count: int
+
+
+@router.get("/stats", response_model=MeterStats)
+async def get_meter_stats(
+    db: DB,
+    current_user: StaffUser,
+):
+    """Получить статистику по счётчикам (для бейджей)"""
+    unverified_result = await db.execute(
+        select(func.count(MeterReading.id)).where(MeterReading.is_verified == False)
+    )
+    unverified_count = unverified_result.scalar() or 0
+    
+    return MeterStats(unverified_count=unverified_count)
 
 
 @router.get("", response_model=List[MeterReadingResponse])

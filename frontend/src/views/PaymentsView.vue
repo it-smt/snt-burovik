@@ -169,7 +169,6 @@ async function savePayment() {
   try {
     await paymentsApi.createPayment({
       ...paymentForm.value,
-      recorded_by: auth.user?.id || 0,
     });
     showPaymentForm.value = false;
     toast.success("Оплата записана");
