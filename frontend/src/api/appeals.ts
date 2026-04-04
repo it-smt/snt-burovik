@@ -1,6 +1,11 @@
 import api from "@/api";
 import type { Appeal, PaginatedResponse } from "@/types";
 
+export interface AppealStats {
+  new_count: number;
+  in_progress_count: number;
+}
+
 export const appealsApi = {
   async getAll(params?: {
     status?: string;
@@ -29,5 +34,9 @@ export const appealsApi = {
 
   async delete(id: number): Promise<void> {
     await api.delete(`/appeals/${id}`);
+  },
+
+  async getStats(): Promise<{ data: AppealStats }> {
+    return api.get("/appeals/stats");
   },
 };

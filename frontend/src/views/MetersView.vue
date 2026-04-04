@@ -64,7 +64,6 @@ async function save() {
   try {
     await metersApi.submitReading({
       ...form.value,
-      submitted_by: auth.user?.id || 0,
     });
     showForm.value = false;
     toast.success("Показания переданы");

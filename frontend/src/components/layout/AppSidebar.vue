@@ -1,9 +1,11 @@
 <!-- src/components/layout/AppSidebar.vue -->
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { appealsApi } from "@/api/appeals";
+import { metersApi } from "@/api/meters";
 
 const props = defineProps<{
   open: boolean;
@@ -19,19 +21,44 @@ const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
 
-// Бейджи (в реальном приложении — из API)
+// Бейджи — живые данные из API
 const badges = ref({
   appeals: 0,
   meters: 0,
 });
 
-onMounted(() => {
-  // Мок — потом заменим на реальные данные
+let refreshInterval: number | null = null;
+
+async function loadBadges() {
+  // Загружаем статистику только для авторизованных пользователей с правами
   if (auth.isChairman || auth.isAdmin) {
-    badges.value.appeals = 2; // Новые обращения
+    try {
+      const stats = await appealsApi.getStats();
+      badges.value.appeals = stats.data.new_count;
+    } catch (e) {
+      console.error("Failed to load appeals stats", e);
+    }
   }
+  
   if (auth.isAccountant || auth.isChairman || auth.isAdmin) {
-    badges.value.meters = 1; // Непроверенные показания
+    try {
+      const stats = await metersApi.getStats();
+      badges.value.meters = stats.data.unverified_count;
+    } catch (e) {
+      console.error("Failed to load meters stats", e);
+    }
+  }
+}
+
+onMounted(() => {
+  loadBadges();
+  // Обновляем бейджи каждые 30 секунд
+  refreshInterval = window.setInterval(loadBadges, 30000);
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    window.clearInterval(refreshInterval);
   }
 });
 

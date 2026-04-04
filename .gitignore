@@ -1,1 +1,43 @@
-Nothing should be ignored in this case, as the changes only include source code files (.py files) without any build artifacts, dependencies, or temporary files.
+```
+# Build artifacts
+*.tsbuildinfo
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Distribution / packaging
+.Python
+*.so
+.Python
+```

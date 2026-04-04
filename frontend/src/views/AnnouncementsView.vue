@@ -46,7 +46,6 @@ async function save() {
   try {
     await announcementsApi.create({
       ...form.value,
-      author_id: auth.user?.id || 0,
     });
     showForm.value = false;
     toast.success("Объявление опубликовано");

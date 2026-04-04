@@ -1,6 +1,10 @@
 import api from "@/api";
 import type { MeterReading } from "@/types";
 
+export interface MeterStats {
+  unverified_count: number;
+}
+
 export const metersApi = {
   async getReadings(params?: {
     plot_id?: number;
@@ -16,5 +20,9 @@ export const metersApi = {
 
   async verifyReading(id: number): Promise<{ data: MeterReading }> {
     return api.post(`/meters/${id}/verify`);
+  },
+
+  async getStats(): Promise<{ data: MeterStats }> {
+    return api.get("/meters/stats");
   },
 };
