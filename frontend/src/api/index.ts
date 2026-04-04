@@ -1,5 +1,3 @@
-// src/api/index.ts
-
 import axios from "axios";
 
 const api = axios.create({
@@ -9,7 +7,6 @@ const api = axios.create({
   },
 });
 
-// Добавляем токен к каждому запросу
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   if (token) {
@@ -18,14 +15,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Обработка 401 — редирект на логин
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+    const url = error.config?.url || "";
+
+    // Не редиректим при ошибке логина
+    if (status === 401 && !url.includes("/auth/login")) {
       localStorage.removeItem("access_token");
       window.location.href = "/login";
     }
+
     return Promise.reject(error);
   },
 );

@@ -1,5 +1,3 @@
-// src/stores/auth.ts
-
 import { authApi } from "@/api/auth";
 import type { User, UserRole } from "@/types";
 import { defineStore } from "pinia";
@@ -26,8 +24,8 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const { data } = await authApi.login({ email, password });
       token.value = data.access_token;
-      user.value = data.user;
       localStorage.setItem("access_token", data.access_token);
+      await fetchUser();
     } finally {
       loading.value = false;
     }

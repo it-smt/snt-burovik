@@ -23,7 +23,10 @@ async function handleLogin() {
     const redirect = (route.query.redirect as string) || "/";
     router.push(redirect);
   } catch (e: any) {
-    error.value = e.response?.data?.detail || "Ошибка входа";
+    error.value =
+      e?.response?.data?.detail ||
+      e?.response?.data?.message ||
+      "Неверный email или пароль";
   } finally {
     loading.value = false;
   }

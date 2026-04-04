@@ -1,67 +1,22 @@
-// src/api/announcements.ts
-
-import type { Announcement } from "@/types";
-
-const mockAnnouncements: Announcement[] = [
-  {
-    id: 1,
-    title: "Собрание членов СОНТ",
-    content:
-      "Уважаемые садоводы! 15 февраля в 12:00 состоится общее собрание. Явка обязательна.",
-    is_important: true,
-    author_id: 2,
-    published_at: "2025-01-20",
-  },
-  {
-    id: 2,
-    title: "Отключение воды",
-    content:
-      "С 1 по 3 февраля будет проводиться ремонт водопровода. Запаситесь водой.",
-    is_important: true,
-    author_id: 2,
-    published_at: "2025-01-25",
-  },
-  {
-    id: 3,
-    title: "Вывоз мусора",
-    content:
-      "Напоминаем, что вывоз мусора осуществляется по вторникам и пятницам.",
-    is_important: false,
-    author_id: 2,
-    published_at: "2025-01-10",
-  },
-];
-
-let nextId = 4;
+import api from "@/api";
+import type { Announcement, PaginatedResponse } from "@/types";
 
 export const announcementsApi = {
-  async getAll(): Promise<{ data: { items: Announcement[] } }> {
-    await new Promise((r) => setTimeout(r, 200));
-    return {
-      data: {
-        items: [...mockAnnouncements].sort((a, b) =>
-          b.published_at.localeCompare(a.published_at),
-        ),
-      },
-    };
+  async getAll(params?: {
+    page?: number;
+    per_page?: number;
+    search?: string;
+  }): Promise<{ data: PaginatedResponse<Announcement> }> {
+    return api.get("/announcements", { params });
   },
 
   async create(
-    data: Omit<Announcement, "id" | "published_at">,
+    data: Omit<Announcement, "id" | "published_at" | "author_id" | "author">,
   ): Promise<{ data: Announcement }> {
-    await new Promise((r) => setTimeout(r, 300));
-    const ann = {
-      ...data,
-      id: nextId++,
-      published_at: new Date().toISOString().split("T")[0],
-    };
-    mockAnnouncements.push(ann);
-    return { data: ann };
+    return api.post("/announcements", data);
   },
 
   async delete(id: number): Promise<void> {
-    await new Promise((r) => setTimeout(r, 200));
-    const idx = mockAnnouncements.findIndex((a) => a.id === id);
-    if (idx !== -1) mockAnnouncements.splice(idx, 1);
+    await api.delete(`/announcements/${id}`);
   },
 };
