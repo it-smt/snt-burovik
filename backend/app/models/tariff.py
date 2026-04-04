@@ -1,12 +1,15 @@
 # app/models/tariff.py
 
 from sqlalchemy import String, Numeric, Date, Enum as SQLEnum
-from sqlalchemy.orm import Mapped, mapped_column
-from typing import Optional
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import Optional, TYPE_CHECKING
 from datetime import date
 import enum
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.payment import Charge
 
 
 class TariffType(str, enum.Enum):
@@ -27,3 +30,6 @@ class Tariff(Base):
     unit: Mapped[str] = mapped_column(String(50), nullable=False)
     effective_from: Mapped[date] = mapped_column(Date, nullable=False)
     effective_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+
+    # Relationships
+    charges: Mapped[list["Charge"]] = relationship("Charge", back_populates="tariff")

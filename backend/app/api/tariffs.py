@@ -4,6 +4,7 @@ from typing import List
 
 from app.api.deps import DB, CurrentUser, StaffUser
 from app.models.tariff import Tariff
+from app.models.payment import Charge
 from app.schemas.tariff import TariffCreate, TariffUpdate, TariffResponse
 
 router = APIRouter(prefix="/tariffs", tags=["tariffs"])
@@ -68,6 +69,18 @@ async def delete_tariff(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Тариф не найден",
+        )
+
+    # Проверяем, есть ли начисления, связанные с этим тарифом
+    charges_result = await db.execute(
+        select(Charge).where(Charge.tariff_id == tariff_id)
+    )
+    charges = charges_result.scalars().all()
+
+    if charges:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Невозможно удалить тариф: существуют начисления, связанные с этим тарифом",
         )
 
     await db.delete(tariff)
