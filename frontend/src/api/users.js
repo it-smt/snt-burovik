@@ -18,4 +18,13 @@ export const usersApi = {
     async resetPassword(id) {
         return api.post(`/users/${id}/reset-password`);
     },
+    async getMe() {
+        return api.get("/users/me");
+    },
+    async updateMe(data) {
+        return api.patch("/users/me", data);
+    },
+    async changePassword(data) {
+        return api.post("/users/change-password", data);
+    },
 };
