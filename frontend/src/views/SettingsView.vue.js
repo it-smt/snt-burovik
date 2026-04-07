@@ -73,7 +73,12 @@ async function saveProfile() {
         return;
     profileLoading.value = true;
     try {
-        await new Promise((r) => setTimeout(r, 500));
+        const { usersApi } = await import("@/api/users");
+        await usersApi.updateMe({
+            full_name: profileForm.value.full_name,
+            email: profileForm.value.email,
+            phone: profileForm.value.phone,
+        });
         if (auth.user) {
             auth.user.full_name = profileForm.value.full_name;
             auth.user.email = profileForm.value.email;
@@ -93,7 +98,11 @@ async function changePassword() {
         return;
     passwordLoading.value = true;
     try {
-        await new Promise((r) => setTimeout(r, 500));
+        const { usersApi } = await import("@/api/users");
+        await usersApi.changePassword({
+            current_password: passwordForm.value.current_password,
+            new_password: passwordForm.value.new_password,
+        });
         passwordForm.value = {
             current_password: "",
             new_password: "",
@@ -102,8 +111,9 @@ async function changePassword() {
         passwordValidation.resetErrors();
         toast.success("Пароль изменён");
     }
-    catch {
-        toast.error("Не удалось изменить пароль");
+    catch (error) {
+        const message = error.response?.data?.detail || "Не удалось изменить пароль";
+        toast.error(message);
     }
     finally {
         passwordLoading.value = false;

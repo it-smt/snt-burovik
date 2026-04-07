@@ -17,6 +17,11 @@ export interface UpdateUserData {
   is_active?: boolean;
 }
 
+export interface ChangePasswordData {
+  current_password: string;
+  new_password: string;
+}
+
 export const usersApi = {
   async getAll(params?: {
     page?: number;
@@ -47,5 +52,17 @@ export const usersApi = {
     id: number,
   ): Promise<{ data: { temp_password: string } }> {
     return api.post(`/users/${id}/reset-password`);
+  },
+
+  async getMe(): Promise<{ data: User }> {
+    return api.get("/users/me");
+  },
+
+  async updateMe(data: UpdateUserData): Promise<{ data: User }> {
+    return api.patch("/users/me", data);
+  },
+
+  async changePassword(data: ChangePasswordData): Promise<{ data: { message: string } }> {
+    return api.post("/users/change-password", data);
   },
 };
