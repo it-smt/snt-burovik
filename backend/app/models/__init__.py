@@ -7,6 +7,7 @@ from app.models.payment import Charge, Payment
 from app.models.meter import MeterReading
 from app.models.announcement import Announcement
 from app.models.appeal import Appeal
+from app.models.organization import Organization
 
 __all__ = [
     "User",
@@ -17,4 +18,5 @@ __all__ = [
     "MeterReading",
     "Announcement",
     "Appeal",
+    "Organization",
 ]

@@ -1,17 +1,13 @@
 ```
 # Build artifacts
-*.js
-*.ts
-*.vue.js
+*.pyc
+__pycache__/
+*.tsbuildinfo
 
 # Dependencies
 node_modules/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+.venv/
+venv/
 
 # Environment
 .env
@@ -21,17 +17,9 @@ __pycache__/
 # Editors
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# Logs
+# Logs and temp files
 *.log
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# Temp files
 *.tmp
+*.swp
 ```

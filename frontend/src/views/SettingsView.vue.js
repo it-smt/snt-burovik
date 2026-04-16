@@ -35,10 +35,10 @@ const passwordValidation = useValidation(() => passwordForm.value, {
 const passwordLoading = ref(false);
 // ========== ДАННЫЕ СНТ ==========
 const sntForm = ref({
-    name: "СОНТ «Буровик»",
-    address: "Московская обл., Ногинский р-н, д. Кузнецы",
-    contact_phone: "+7 900 765-43-21",
-    contact_email: "info@snt-burovik.ru",
+    name: "",
+    address: "",
+    contact_phone: "",
+    contact_email: "",
 });
 const sntValidation = useValidation(() => sntForm.value, {
     name: { required: true, minLength: 3 },
@@ -58,7 +58,7 @@ const notificationsForm = ref({
 });
 const notificationsLoading = ref(false);
 // ========== INIT ==========
-onMounted(() => {
+onMounted(async () => {
     if (auth.user) {
         profileForm.value = {
             full_name: auth.user.full_name,
@@ -66,7 +66,28 @@ onMounted(() => {
             phone: auth.user.phone,
         };
     }
+    // Загрузка данных СНТ
+    if (auth.isChairman || auth.isAdmin) {
+        await loadSntData();
+    }
 });
+async function loadSntData() {
+    try {
+        const { organizationsApi } = await import("@/api/organizations");
+        const response = await organizationsApi.get();
+        if (response.data && response.data.id !== 0) {
+            sntForm.value = {
+                name: response.data.name || "",
+                address: response.data.address || "",
+                contact_phone: response.data.contact_phone || "",
+                contact_email: response.data.contact_email || "",
+            };
+        }
+    }
+    catch (error) {
+        console.error("Failed to load SNT data:", error);
+    }
+}
 // ========== ACTIONS ==========
 async function saveProfile() {
     if (!profileValidation.validate())
@@ -124,11 +145,18 @@ async function saveSnt() {
         return;
     sntLoading.value = true;
     try {
-        await new Promise((r) => setTimeout(r, 500));
+        const { organizationsApi } = await import("@/api/organizations");
+        await organizationsApi.update({
+            name: sntForm.value.name,
+            address: sntForm.value.address,
+            contact_phone: sntForm.value.contact_phone || undefined,
+            contact_email: sntForm.value.contact_email || undefined,
+        });
         toast.success("Данные СНТ сохранены");
     }
-    catch {
-        toast.error("Не удалось сохранить данные СНТ");
+    catch (error) {
+        const message = error.response?.data?.detail || "Не удалось сохранить данные СНТ";
+        toast.error(message);
     }
     finally {
         sntLoading.value = false;
