@@ -96,8 +96,9 @@ async function load() {
     }
 }
 onMounted(load);
-function getPlotNumber(id) {
-    return plots.value.find((p) => p.id === id)?.number || "—";
+function getPlotInfo(id) {
+    const plot = plots.value.find((p) => p.id === id);
+    return plot ? `${plot.number} (${plot.address})` : "—";
 }
 function getTariffName(id) {
     return tariffs.value.find((t) => t.id === id)?.name || "—";
@@ -415,7 +416,7 @@ else if (__VLS_ctx.tab === 'charges') {
             ...{ class: "mobile-card-title" },
         });
         /** @type {__VLS_StyleScopedClasses['mobile-card-title']} */ ;
-        (__VLS_ctx.getPlotNumber(c.plot_id));
+        (__VLS_ctx.getPlotInfo(c.plot_id));
         __VLS_asFunctionalElement1(__VLS_intrinsics.span, __VLS_intrinsics.span)({
             ...{ class: "badge badge-warning" },
         });
@@ -469,7 +470,7 @@ else if (__VLS_ctx.tab === 'charges') {
             (c.description);
         }
         // @ts-ignore
-        [tab, filteredCharges, filteredCharges, filterPlotId, filterPeriod, clearFilters, loading, formatMoney, formatMoney, chargesTotalAmount, getPlotNumber, getTariffName,];
+        [tab, filteredCharges, filteredCharges, filterPlotId, filterPeriod, clearFilters, loading, formatMoney, formatMoney, chargesTotalAmount, getPlotInfo, getTariffName,];
     }
     if (!__VLS_ctx.filteredCharges.length) {
         __VLS_asFunctionalElement1(__VLS_intrinsics.div, __VLS_intrinsics.div)({
@@ -531,7 +532,7 @@ else {
             ...{ class: "mobile-card-title" },
         });
         /** @type {__VLS_StyleScopedClasses['mobile-card-title']} */ ;
-        (__VLS_ctx.getPlotNumber(p.plot_id));
+        (__VLS_ctx.getPlotInfo(p.plot_id));
         __VLS_asFunctionalElement1(__VLS_intrinsics.span, __VLS_intrinsics.span)({
             ...{ class: "badge badge-success" },
         });
@@ -585,7 +586,7 @@ else {
             (p.description);
         }
         // @ts-ignore
-        [auth, openMassChargeForm, filteredCharges, filteredPayments, filteredPayments, filterPlotId, filterPeriod, formatMoney, formatMoney, getPlotNumber, paymentsTotalAmount, methodLabels,];
+        [auth, openMassChargeForm, filteredCharges, filteredPayments, filteredPayments, filterPlotId, filterPeriod, formatMoney, formatMoney, getPlotInfo, paymentsTotalAmount, methodLabels,];
     }
     if (!__VLS_ctx.filteredPayments.length) {
         __VLS_asFunctionalElement1(__VLS_intrinsics.div, __VLS_intrinsics.div)({

@@ -140,3 +140,17 @@ export interface ActivityLog {
   details?: string;
   created_at: string;
 }
+
+export interface Organization {
+  id: number;
+  name: string;
+  address: string;
+  inn?: string;
+  kpp?: string;
+  contact_phone?: string;
+  contact_email?: string;
+  bank_account?: string;
+  bank_name?: string;
+  bik?: string;
+  description?: string;
+}

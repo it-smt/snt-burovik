@@ -113,8 +113,9 @@ async function load() {
 
 onMounted(load);
 
-function getPlotNumber(id: number) {
-  return plots.value.find((p) => p.id === id)?.number || "—";
+function getPlotInfo(id: number) {
+  const plot = plots.value.find((p) => p.id === id);
+  return plot ? `${plot.number} (${plot.address})` : "—";
 }
 function getTariffName(id: number) {
   return tariffs.value.find((t) => t.id === id)?.name || "—";
@@ -340,7 +341,7 @@ const paymentsTotalAmount = computed(() =>
         <div v-for="c in filteredCharges" :key="c.id" class="mobile-card">
           <div class="mobile-card-header">
             <span class="mobile-card-title">{{
-              getPlotNumber(c.plot_id)
+              getPlotInfo(c.plot_id)
             }}</span>
             <span class="badge badge-warning">{{ c.period }}</span>
           </div>
@@ -392,7 +393,7 @@ const paymentsTotalAmount = computed(() =>
         <div v-for="p in filteredPayments" :key="p.id" class="mobile-card">
           <div class="mobile-card-header">
             <span class="mobile-card-title">{{
-              getPlotNumber(p.plot_id)
+              getPlotInfo(p.plot_id)
             }}</span>
             <span class="badge badge-success">{{ p.payment_date }}</span>
           </div>
