@@ -196,7 +196,7 @@ async function saveNotifications() {
 }
 
 const roleLabels: Record<string, string> = {
-  owner: "Владелец",
+  owner: "Собственник",
   chairman: "Председатель",
   accountant: "Бухгалтер",
   admin: "Администратор",

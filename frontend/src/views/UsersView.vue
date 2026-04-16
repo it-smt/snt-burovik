@@ -38,14 +38,14 @@ const passwordUser = ref<User | null>(null);
 
 const roles: { value: UserRole | ""; label: string }[] = [
   { value: "", label: "Все роли" },
-  { value: "owner", label: "Владельцы" },
+  { value: "owner", label: "Собственники" },
   { value: "chairman", label: "Председатели" },
   { value: "accountant", label: "Бухгалтеры" },
   { value: "admin", label: "Администраторы" },
 ];
 
 const roleLabels: Record<UserRole, string> = {
-  owner: "Владелец",
+  owner: "Собственник",
   chairman: "Председатель",
   accountant: "Бухгалтер",
   admin: "Администратор",
