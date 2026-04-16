@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 
 
 class UserRole(str, enum.Enum):
-    OWNER = "owner"
-    CHAIRMAN = "chairman"
-    ACCOUNTANT = "accountant"
-    ADMIN = "admin"
+    OWNER = "owner"  # Владелец участка (собственник)
+    CHAIRMAN = "chairman"  # Председатель СНТ
+    ACCOUNTANT = "accountant"  # Бухгалтер СНТ
+    ADMIN = "admin"  # Администратор системы
 
 
 class User(Base):

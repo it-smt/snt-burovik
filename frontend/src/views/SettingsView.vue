@@ -47,10 +47,10 @@ const passwordLoading = ref(false);
 
 // ========== ДАННЫЕ СНТ ==========
 const sntForm = ref({
-  name: "СОНТ «Буровик»",
-  address: "Московская обл., Ногинский р-н, д. Кузнецы",
-  contact_phone: "+7 900 765-43-21",
-  contact_email: "info@snt-burovik.ru",
+  name: "",
+  address: "",
+  contact_phone: "",
+  contact_email: "",
 });
 
 const sntValidation = useValidation(() => sntForm.value, {
