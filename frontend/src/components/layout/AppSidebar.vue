@@ -131,7 +131,7 @@ function isActive(to: string) {
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <i class="pi pi-sun"></i>
-        <span class="logo-text">СОНТ «Буровик»</span>
+        <span class="logo-text">{{ auth.sntName }}</span>
       </div>
       <button v-if="isMobile" class="close-sidebar" @click="emit('close')">
         <i class="pi pi-times"></i>

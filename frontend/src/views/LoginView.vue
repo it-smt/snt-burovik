@@ -38,7 +38,7 @@ async function handleLogin() {
     <div class="login-card">
       <div class="login-header">
         <i class="pi pi-sun"></i>
-        <h1>СОНТ «Буровик»</h1>
+        <h1>{{ auth.sntName || "СОНТ «Буровик»" }}</h1>
         <p>Вход в систему</p>
       </div>
 

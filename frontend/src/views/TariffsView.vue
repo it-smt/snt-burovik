@@ -86,8 +86,9 @@ async function confirmDel() {
     showConfirm.value = false;
     toast.success("Тариф удалён");
     await load();
-  } catch {
-    toast.error("Не удалось удалить тариф");
+  } catch (error: any) {
+    const message = error.response?.data?.detail || "Не удалось удалить тариф";
+    toast.error(message);
   }
 }
 </script>
