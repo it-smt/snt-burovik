@@ -104,6 +104,7 @@ async function loadSntData() {
     }
   } catch (error) {
     console.error("Failed to load SNT data:", error);
+    toast.error("Не удалось загрузить данные СНТ");
   }
 }
 
@@ -127,8 +128,9 @@ async function saveProfile() {
     }
 
     toast.success("Профиль обновлён");
-  } catch {
-    toast.error("Не удалось сохранить профиль");
+  } catch (error: any) {
+    const message = error.response?.data?.detail || "Не удалось сохранить профиль";
+    toast.error(message);
   } finally {
     profileLoading.value = false;
   }
@@ -167,12 +169,15 @@ async function saveSnt() {
   sntLoading.value = true;
   try {
     const { organizationsApi } = await import("@/api/organizations");
-    await organizationsApi.update({
+    const response = await organizationsApi.update({
       name: sntForm.value.name,
       address: sntForm.value.address,
       contact_phone: sntForm.value.contact_phone || undefined,
       contact_email: sntForm.value.contact_email || undefined,
     });
+
+    // Обновляем данные организации в store
+    auth.updateOrganization(response.data);
 
     toast.success("Данные СНТ сохранены");
   } catch (error: any) {

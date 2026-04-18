@@ -36,7 +36,7 @@ function logout() {
       <button class="menu-toggle" @click="emit('toggle-sidebar')">
         <i class="pi pi-bars"></i>
       </button>
-      <span class="header-title">СОНТ «Буровик»</span>
+      <span class="header-title">{{ auth.sntName }}</span>
     </div>
 
     <div class="header-right">
