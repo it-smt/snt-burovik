@@ -77,7 +77,7 @@ watch(() => props.user, (user) => {
     }
 }, { immediate: true });
 const roles = [
-    { value: "owner", label: "Владелец" },
+    { value: "owner", label: "Собственник" },
     { value: "chairman", label: "Председатель" },
     { value: "accountant", label: "Бухгалтер" },
     { value: "admin", label: "Администратор" },

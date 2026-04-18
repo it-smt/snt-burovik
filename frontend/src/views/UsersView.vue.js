@@ -26,13 +26,13 @@ const tempPassword = ref("");
 const passwordUser = ref(null);
 const roles = [
     { value: "", label: "Все роли" },
-    { value: "owner", label: "Владельцы" },
+    { value: "owner", label: "Собственники" },
     { value: "chairman", label: "Председатели" },
     { value: "accountant", label: "Бухгалтеры" },
     { value: "admin", label: "Администраторы" },
 ];
 const roleLabels = {
-    owner: "Владелец",
+    owner: "Собственник",
     chairman: "Председатель",
     accountant: "Бухгалтер",
     admin: "Администратор",
