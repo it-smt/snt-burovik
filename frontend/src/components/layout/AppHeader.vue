@@ -13,7 +13,7 @@ const router = useRouter();
 const showLogoutConfirm = ref(false);
 
 const roleLabels: Record<string, string> = {
-  owner: "Владелец",
+  owner: "Собственник",
   chairman: "Председатель",
   accountant: "Бухгалтер",
   admin: "Администратор",

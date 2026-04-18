@@ -7,7 +7,7 @@ const auth = useAuthStore();
 const router = useRouter();
 const showLogoutConfirm = ref(false);
 const roleLabels = {
-    owner: "Владелец",
+    owner: "Собственник",
     chairman: "Председатель",
     accountant: "Бухгалтер",
     admin: "Администратор",

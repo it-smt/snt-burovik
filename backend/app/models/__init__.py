@@ -8,6 +8,7 @@ from app.models.meter import MeterReading
 from app.models.announcement import Announcement
 from app.models.appeal import Appeal
 from app.models.organization import Organization
+from app.models.activity import ActivityLog
 
 __all__ = [
     "User",
@@ -19,4 +20,5 @@ __all__ = [
     "Announcement",
     "Appeal",
     "Organization",
+    "ActivityLog",
 ]

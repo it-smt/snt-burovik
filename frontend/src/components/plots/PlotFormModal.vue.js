@@ -250,10 +250,10 @@ var __VLS_21;
 const __VLS_24 = FormField || FormField;
 // @ts-ignore
 const __VLS_25 = __VLS_asFunctionalComponent1(__VLS_24, new __VLS_24({
-    label: "Владелец",
+    label: "Собственник",
 }));
 const __VLS_26 = __VLS_25({
-    label: "Владелец",
+    label: "Собственник",
 }, ...__VLS_functionalComponentArgsRest(__VLS_25));
 const { default: __VLS_29 } = __VLS_27.slots;
 __VLS_asFunctionalElement1(__VLS_intrinsics.select, __VLS_intrinsics.select)({

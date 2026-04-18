@@ -1,13 +1,17 @@
 ```
-# Build artifacts
-*.pyc
-__pycache__/
-*.tsbuildinfo
-
 # Dependencies
 node_modules/
 .venv/
 venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+dist/
+build/
+target/
 
 # Environment
 .env
@@ -17,9 +21,21 @@ venv/
 # Editors
 .vscode/
 .idea/
-
-# Logs and temp files
-*.log
-*.tmp
 *.swp
+*.swo
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
 ```

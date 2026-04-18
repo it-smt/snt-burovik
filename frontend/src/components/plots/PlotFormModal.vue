@@ -181,7 +181,7 @@ async function handleSubmit() {
           />
         </FormField>
 
-        <FormField label="Владелец">
+        <FormField label="Собственник">
           <select v-model="form.owner_id">
             <option :value="null">— Без владельца —</option>
             <option v-for="owner in owners" :key="owner.id" :value="owner.id">

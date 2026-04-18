@@ -176,7 +176,7 @@ async function saveNotifications() {
     }
 }
 const roleLabels = {
-    owner: "Владелец",
+    owner: "Собственник",
     chairman: "Председатель",
     accountant: "Бухгалтер",
     admin: "Администратор",

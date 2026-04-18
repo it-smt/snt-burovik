@@ -171,9 +171,9 @@ const paymentMethodLabels: Record<string, string> = {
             </div>
           </div>
 
-          <!-- Владелец -->
+          <!-- Собственник -->
           <div class="info-section">
-            <h4>Владелец</h4>
+            <h4>Собственник</h4>
             <div v-if="plot.owner" class="owner-info">
               <div class="owner-avatar">
                 {{ plot.owner.full_name.charAt(0) }}
@@ -189,7 +189,7 @@ const paymentMethodLabels: Record<string, string> = {
             </div>
             <div v-else class="no-owner-info">
               <i class="pi pi-user-minus"></i>
-              <span>Владелец не назначен</span>
+              <span>Собственник не назначен</span>
             </div>
           </div>
         </div>
