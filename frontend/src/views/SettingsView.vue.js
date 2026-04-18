@@ -75,6 +75,7 @@ async function loadSntData() {
     try {
         const { organizationsApi } = await import("@/api/organizations");
         const response = await organizationsApi.get();
+        console.log("Loaded organization:", response.data);
         if (response.data && response.data.id !== 0) {
             sntForm.value = {
                 name: response.data.name || "",
@@ -86,6 +87,10 @@ async function loadSntData() {
     }
     catch (error) {
         console.error("Failed to load SNT data:", error);
+        // Не показываем ошибку, если организация просто не создана
+        if (error.response?.status !== 404) {
+            toast.error("Не удалось загрузить данные СНТ");
+        }
     }
 }
 // ========== ACTIONS ==========
@@ -95,20 +100,23 @@ async function saveProfile() {
     profileLoading.value = true;
     try {
         const { usersApi } = await import("@/api/users");
-        await usersApi.updateMe({
+        const response = await usersApi.updateMe({
             full_name: profileForm.value.full_name,
             email: profileForm.value.email,
             phone: profileForm.value.phone,
         });
+        // Обновляем данные в store
         if (auth.user) {
-            auth.user.full_name = profileForm.value.full_name;
-            auth.user.email = profileForm.value.email;
-            auth.user.phone = profileForm.value.phone;
+            auth.user.full_name = response.data.full_name;
+            auth.user.email = response.data.email;
+            auth.user.phone = response.data.phone;
         }
         toast.success("Профиль обновлён");
     }
-    catch {
-        toast.error("Не удалось сохранить профиль");
+    catch (error) {
+        console.error("Profile update error:", error);
+        const message = error.response?.data?.detail || "Не удалось сохранить профиль";
+        toast.error(message);
     }
     finally {
         profileLoading.value = false;
@@ -146,16 +154,21 @@ async function saveSnt() {
     sntLoading.value = true;
     try {
         const { organizationsApi } = await import("@/api/organizations");
-        await organizationsApi.update({
+        console.log("Saving SNT data:", sntForm.value);
+        const response = await organizationsApi.update({
             name: sntForm.value.name,
             address: sntForm.value.address,
             contact_phone: sntForm.value.contact_phone || undefined,
             contact_email: sntForm.value.contact_email || undefined,
         });
+        console.log("Saved organization:", response.data);
+        // Обновляем данные организации в store
+        auth.updateOrganization(response.data);
         toast.success("Данные СНТ сохранены");
     }
     catch (error) {
-        const message = error.response?.data?.detail || "Не удалось сохранить данные СНТ";
+        console.error("SNT save error:", error);
+        const message = error.response?.data?.detail || error.message || "Не удалось сохранить данные СНТ";
         toast.error(message);
     }
     finally {

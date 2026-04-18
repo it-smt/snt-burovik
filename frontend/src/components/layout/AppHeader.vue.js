@@ -56,6 +56,7 @@ __VLS_asFunctionalElement1(__VLS_intrinsics.span, __VLS_intrinsics.span)({
     ...{ class: "header-title" },
 });
 /** @type {__VLS_StyleScopedClasses['header-title']} */ ;
+(__VLS_ctx.auth.sntName);
 __VLS_asFunctionalElement1(__VLS_intrinsics.div, __VLS_intrinsics.div)({
     ...{ class: "header-right" },
 });
@@ -107,7 +108,7 @@ if (__VLS_ctx.showLogoutConfirm) {
                     return;
                 __VLS_ctx.showLogoutConfirm = false;
                 // @ts-ignore
-                [roleLabels, auth, auth, confirmLogout, showLogoutConfirm, showLogoutConfirm,];
+                [auth, auth, auth, roleLabels, confirmLogout, showLogoutConfirm, showLogoutConfirm,];
             } });
     const __VLS_7 = ({ confirm: {} },
         { onConfirm: (__VLS_ctx.logout) });

@@ -79,8 +79,9 @@ async function confirmDel() {
         toast.success("Тариф удалён");
         await load();
     }
-    catch {
-        toast.error("Не удалось удалить тариф");
+    catch (error) {
+        const message = error.response?.data?.detail || "Не удалось удалить тариф";
+        toast.error(message);
     }
 }
 const __VLS_ctx = {
