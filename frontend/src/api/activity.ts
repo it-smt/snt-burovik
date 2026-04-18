@@ -1,7 +1,7 @@
 // src/api/activity.ts
 
 import type { ActivityLog } from "@/types";
-import { api } from "./index";
+import api from "./index";
 
 export const activityApi = {
   async getRecent(limit = 20): Promise<{ data: ActivityLog[] }> {
