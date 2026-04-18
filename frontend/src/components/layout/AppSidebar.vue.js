@@ -132,6 +132,7 @@ __VLS_asFunctionalElement1(__VLS_intrinsics.span, __VLS_intrinsics.span)({
     ...{ class: "logo-text" },
 });
 /** @type {__VLS_StyleScopedClasses['logo-text']} */ ;
+(__VLS_ctx.auth.sntName);
 if (__VLS_ctx.isMobile) {
     __VLS_asFunctionalElement1(__VLS_intrinsics.button, __VLS_intrinsics.button)({
         ...{ onClick: (...[$event]) => {
@@ -139,7 +140,7 @@ if (__VLS_ctx.isMobile) {
                     return;
                 __VLS_ctx.emit('close');
                 // @ts-ignore
-                [open, isMobile, isMobile, emit,];
+                [open, isMobile, isMobile, auth, emit,];
             } },
         ...{ class: "close-sidebar" },
     });

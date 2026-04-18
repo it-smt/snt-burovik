@@ -103,7 +103,7 @@ async function loadSntData() {
         contact_email: response.data.contact_email || "",
       };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to load SNT data:", error);
     // Не показываем ошибку, если организация просто не создана
     if (error.response?.status !== 404) {

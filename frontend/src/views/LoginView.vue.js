@@ -51,6 +51,7 @@ __VLS_asFunctionalElement1(__VLS_intrinsics.i, __VLS_intrinsics.i)({
 /** @type {__VLS_StyleScopedClasses['pi']} */ ;
 /** @type {__VLS_StyleScopedClasses['pi-sun']} */ ;
 __VLS_asFunctionalElement1(__VLS_intrinsics.h1, __VLS_intrinsics.h1)({});
+(__VLS_ctx.auth.sntName || "СОНТ «Буровик»");
 __VLS_asFunctionalElement1(__VLS_intrinsics.p, __VLS_intrinsics.p)({});
 __VLS_asFunctionalElement1(__VLS_intrinsics.form, __VLS_intrinsics.form)({
     ...{ onSubmit: (__VLS_ctx.handleLogin) },
@@ -132,7 +133,7 @@ __VLS_asFunctionalElement1(__VLS_intrinsics.button, __VLS_intrinsics.button)({
             __VLS_ctx.password = '123456';
             ;
             // @ts-ignore
-            [handleLogin, error, error, email, email, password, password, loading, loading, loading,];
+            [auth, handleLogin, error, error, email, email, password, password, loading, loading, loading,];
         } },
     type: "button",
 });
