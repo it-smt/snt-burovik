@@ -9,6 +9,8 @@ from app.api.deps import DB, CurrentUser, StaffUser
 from app.models.plot import Plot
 from app.models.user import User, UserRole
 from app.models.payment import Charge, Payment
+from app.models.activity import ActivityAction
+from app.utils.activity_logger import log_activity
 from app.schemas.plot import PlotCreate, PlotUpdate, PlotResponse, PlotBalance
 from app.schemas.common import PaginatedResponse
 from app.schemas.user import UserResponse
@@ -83,6 +85,17 @@ async def create_plot(data: PlotCreate, db: DB, current_user: StaffUser):
     # Load owner
     if plot.owner_id:
         await db.refresh(plot, ["owner"])
+
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.CREATE,
+        entity_type="plot",
+        entity_id=plot.id,
+        entity_name=f"Участок {plot.number}",
+        details=f"Создан участок {plot.number} (ID: {plot.id})",
+    )
 
     return plot
 
@@ -215,12 +228,28 @@ async def update_plot(plot_id: int, data: PlotUpdate, db: DB, current_user: Staf
         )
 
     update_data = data.model_dump(exclude_unset=True)
-
+    
+    # Store old values for logging
+    old_values = {}
     for field, value in update_data.items():
+        if hasattr(plot, field):
+            old_values[field] = getattr(plot, field)
         setattr(plot, field, value)
 
     await db.commit()
     await db.refresh(plot, ["owner"])
+
+    # Log activity
+    changes = ", ".join([f"{k}: {old_values[k]} -> {update_data[k]}" for k in update_data.keys() if k in old_values])
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.UPDATE,
+        entity_type="plot",
+        entity_id=plot.id,
+        entity_name=f"Участок {plot.number}",
+        details=f"Изменения: {changes}" if changes else "Обновлен участок",
+    )
 
     return plot
 
@@ -236,5 +265,20 @@ async def delete_plot(plot_id: int, db: DB, current_user: StaffUser):
             detail="Участок не найден",
         )
 
+    # Store info for logging before deletion
+    plot_number = plot.number
+    plot_id_for_log = plot.id
+
     await db.delete(plot)
     await db.commit()
+
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.DELETE,
+        entity_type="plot",
+        entity_id=plot_id_for_log,
+        entity_name=f"Участок {plot_number}",
+        details=f"Удален участок {plot_number} (ID: {plot_id_for_log})",
+    )

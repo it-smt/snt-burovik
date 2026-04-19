@@ -8,6 +8,8 @@ import secrets
 
 from app.api.deps import DB, AdminUser, get_current_user
 from app.models.user import User, UserRole
+from app.models.activity import ActivityAction
+from app.utils.activity_logger import log_activity
 from app.schemas.user import UserCreate, UserUpdate, UserResponse, UserInDB
 from app.schemas.common import PaginatedResponse
 from app.utils.security import get_password_hash, verify_password
@@ -80,6 +82,17 @@ async def create_user(data: UserCreate, db: DB, current_user: AdminUser):
     await db.commit()
     await db.refresh(user)
 
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.CREATE,
+        entity_type="user",
+        entity_id=user.id,
+        entity_name=f"{user.full_name} ({user.email})",
+        details=f"Создан пользователь {user.full_name} (роль: {user.role.value})",
+    )
+
     return user
 
 
@@ -140,12 +153,28 @@ async def update_user(user_id: int, data: UserUpdate, db: DB, current_user: Admi
         )
 
     update_data = data.model_dump(exclude_unset=True)
-
+    
+    # Store old values for logging
+    old_values = {}
     for field, value in update_data.items():
+        if hasattr(user, field):
+            old_values[field] = getattr(user, field)
         setattr(user, field, value)
 
     await db.commit()
     await db.refresh(user)
+
+    # Log activity
+    changes = ", ".join([f"{k}: {old_values[k]} -> {update_data[k]}" for k in update_data.keys() if k in old_values])
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.UPDATE,
+        entity_type="user",
+        entity_id=user.id,
+        entity_name=f"{user.full_name} ({user.email})",
+        details=f"Изменения: {changes}" if changes else "Обновлен пользователь",
+    )
 
     return user
 
@@ -161,8 +190,24 @@ async def delete_user(user_id: int, db: DB, current_user: AdminUser):
             detail="Пользователь не найден",
         )
 
+    # Store info for logging before deletion
+    user_name = user.full_name
+    user_email = user.email
+    user_id_for_log = user.id
+
     await db.delete(user)
     await db.commit()
+
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.DELETE,
+        entity_type="user",
+        entity_id=user_id_for_log,
+        entity_name=f"{user_name} ({user_email})",
+        details=f"Удален пользователь {user_name} (email: {user_email})",
+    )
 
 
 @router.post("/{user_id}/reset-password")
