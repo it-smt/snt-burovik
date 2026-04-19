@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import ActivityFeed from "./ActivityFeed.vue";
 import { reportsApi } from "@/api/reports";
 import { appealsApi } from "@/api/appeals";
 
@@ -90,38 +89,34 @@ function formatMoney(amount: number): string {
         </div>
       </div>
 
-      <div class="dashboard-grid">
-        <div class="quick-links-section">
-          <h3><i class="pi pi-bolt"></i> Быстрые действия</h3>
-          <div class="quick-links">
-            <RouterLink to="/plots" class="action-card">
-              <i class="pi pi-map"></i>
-              <span>Управление участками</span>
-            </RouterLink>
-            <RouterLink to="/users" class="action-card">
-              <i class="pi pi-users"></i>
-              <span>Пользователи</span>
-            </RouterLink>
-            <RouterLink to="/announcements" class="action-card">
-              <i class="pi pi-megaphone"></i>
-              <span>Создать объявление</span>
-            </RouterLink>
-            <RouterLink to="/appeals" class="action-card">
-              <i class="pi pi-envelope"></i>
-              <span>Обращения</span>
-            </RouterLink>
-            <RouterLink to="/reports" class="action-card">
-              <i class="pi pi-chart-bar"></i>
-              <span>Отчёты</span>
-            </RouterLink>
-            <RouterLink to="/settings" class="action-card">
-              <i class="pi pi-cog"></i>
-              <span>Настройки</span>
-            </RouterLink>
-          </div>
+      <div class="quick-links-section">
+        <h3><i class="pi pi-bolt"></i> Быстрые действия</h3>
+        <div class="quick-links">
+          <RouterLink to="/plots" class="action-card">
+            <i class="pi pi-map"></i>
+            <span>Управление участками</span>
+          </RouterLink>
+          <RouterLink to="/users" class="action-card">
+            <i class="pi pi-users"></i>
+            <span>Пользователи</span>
+          </RouterLink>
+          <RouterLink to="/announcements" class="action-card">
+            <i class="pi pi-megaphone"></i>
+            <span>Создать объявление</span>
+          </RouterLink>
+          <RouterLink to="/appeals" class="action-card">
+            <i class="pi pi-envelope"></i>
+            <span>Обращения</span>
+          </RouterLink>
+          <RouterLink to="/reports" class="action-card">
+            <i class="pi pi-chart-bar"></i>
+            <span>Отчёты</span>
+          </RouterLink>
+          <RouterLink to="/settings" class="action-card">
+            <i class="pi pi-cog"></i>
+            <span>Настройки</span>
+          </RouterLink>
         </div>
-
-        <ActivityFeed />
       </div>
     </template>
   </div>
@@ -138,16 +133,6 @@ function formatMoney(amount: number): string {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-  }
 }
 
 .quick-links-section {
@@ -168,7 +153,7 @@ function formatMoney(amount: number): string {
 
 .quick-links {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
 }
 </style>

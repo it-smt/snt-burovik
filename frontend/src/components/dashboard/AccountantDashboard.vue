@@ -2,7 +2,6 @@
 import { ref, onMounted } from "vue";
 import { reportsApi } from "@/api/reports";
 import { metersApi } from "@/api/meters";
-import ActivityFeed from "./ActivityFeed.vue";
 
 const stats = ref({
   monthIncome: 0,
@@ -114,9 +113,6 @@ function formatMoney(amount: number): string {
           </RouterLink>
         </div>
       </div>
-
-      <!-- Лента активности -->
-      <ActivityFeed />
     </template>
   </div>
 </template>

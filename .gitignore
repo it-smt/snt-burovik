@@ -1,46 +1,24 @@
 ```
-# Dependencies
-node_modules/
-
 # Build artifacts
+*.js
+*.tsbuildinfo
 dist/
 build/
-*.js.map
-
+# Dependencies
+node_modules/
 # Cache directories
-.nuxt/
-.next/
-public/dist/
-
-# Environment variables
+.vite/
+.cache/
+# Environment
 .env
 .env.local
-*.env.*
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
+.env.*
 # Logs
 *.log
-
 # Temporary files
 *.tmp
-
-# Python cache (if any Python files exist in frontend)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Coverage reports
-coverage/
-htmlcov/
-*.coverage
-
-# OS generated files
-.DS_Store
-Thumbs.db
+*.swp
+# IDE specific
+.vscode/
+.idea/
 ```

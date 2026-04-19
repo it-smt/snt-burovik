@@ -1,5 +1,4 @@
 import { ref, onMounted } from "vue";
-import ActivityFeed from "./ActivityFeed.vue";
 import { reportsApi } from "@/api/reports";
 import { appealsApi } from "@/api/appeals";
 const stats = ref({
@@ -163,10 +162,6 @@ else {
     });
     /** @type {__VLS_StyleScopedClasses['stat-label']} */ ;
     __VLS_asFunctionalElement1(__VLS_intrinsics.div, __VLS_intrinsics.div)({
-        ...{ class: "dashboard-grid" },
-    });
-    /** @type {__VLS_StyleScopedClasses['dashboard-grid']} */ ;
-    __VLS_asFunctionalElement1(__VLS_intrinsics.div, __VLS_intrinsics.div)({
         ...{ class: "quick-links-section" },
     });
     /** @type {__VLS_StyleScopedClasses['quick-links-section']} */ ;
@@ -318,10 +313,6 @@ else {
     // @ts-ignore
     [];
     var __VLS_33;
-    const __VLS_36 = ActivityFeed;
-    // @ts-ignore
-    const __VLS_37 = __VLS_asFunctionalComponent1(__VLS_36, new __VLS_36({}));
-    const __VLS_38 = __VLS_37({}, ...__VLS_functionalComponentArgsRest(__VLS_37));
 }
 // @ts-ignore
 [];

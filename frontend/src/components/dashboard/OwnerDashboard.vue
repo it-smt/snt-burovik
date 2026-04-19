@@ -5,7 +5,6 @@ import { ref, onMounted } from "vue";
 import { plotsApi } from "@/api/plots";
 import { announcementsApi } from "@/api/announcements";
 import type { Plot, PlotBalance, Announcement } from "@/types";
-import ActivityFeed from "./ActivityFeed.vue";
 
 const plots = ref<Plot[]>([]);
 const balances = ref<Map<number, PlotBalance>>(new Map());
@@ -138,9 +137,6 @@ function formatDate(dateStr: string): string {
         <p v-if="announcements.length === 0" class="empty">Нет объявлений</p>
       </div>
     </div>
-
-    <!-- Лента активности -->
-    <ActivityFeed />
   </div>
 </template>
 
