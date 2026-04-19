@@ -1,7 +1,6 @@
 import { ref, onMounted } from "vue";
 import { reportsApi } from "@/api/reports";
 import { metersApi } from "@/api/meters";
-import ActivityFeed from "./ActivityFeed.vue";
 const stats = ref({
     monthIncome: 0,
     monthCharges: 0,
@@ -270,10 +269,6 @@ else {
     // @ts-ignore
     [];
     var __VLS_21;
-    const __VLS_24 = ActivityFeed;
-    // @ts-ignore
-    const __VLS_25 = __VLS_asFunctionalComponent1(__VLS_24, new __VLS_24({}));
-    const __VLS_26 = __VLS_25({}, ...__VLS_functionalComponentArgsRest(__VLS_25));
 }
 // @ts-ignore
 [];

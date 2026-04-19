@@ -1,7 +1,6 @@
 import { ref, onMounted } from "vue";
 import { plotsApi } from "@/api/plots";
 import { announcementsApi } from "@/api/announcements";
-import ActivityFeed from "./ActivityFeed.vue";
 const plots = ref([]);
 const balances = ref(new Map());
 const announcements = ref([]);
@@ -289,10 +288,6 @@ else {
         });
         /** @type {__VLS_StyleScopedClasses['empty']} */ ;
     }
-    const __VLS_18 = ActivityFeed;
-    // @ts-ignore
-    const __VLS_19 = __VLS_asFunctionalComponent1(__VLS_18, new __VLS_18({}));
-    const __VLS_20 = __VLS_19({}, ...__VLS_functionalComponentArgsRest(__VLS_19));
 }
 // @ts-ignore
 [announcements,];
