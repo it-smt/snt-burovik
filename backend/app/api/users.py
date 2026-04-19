@@ -83,6 +83,37 @@ async def create_user(data: UserCreate, db: DB, current_user: AdminUser):
     return user
 
 
+@router.get("/me", response_model=UserResponse)
+async def get_me(db: DB, current_user: User = Depends(get_current_user)):
+    return current_user
+
+
+@router.patch("/me", response_model=UserResponse)
+async def update_me(
+    data: UserUpdate,
+    db: DB,
+    current_user: User = Depends(get_current_user),
+):
+    # Проверка: пользователь может редактировать только себя
+    update_data = data.model_dump(exclude_unset=True)
+    
+    # Нельзя изменить роль через этот метод
+    if "role" in update_data:
+        del update_data["role"]
+    
+    # Нельзя изменить is_active через этот метод
+    if "is_active" in update_data:
+        del update_data["is_active"]
+
+    for field, value in update_data.items():
+        setattr(current_user, field, value)
+
+    await db.commit()
+    await db.refresh(current_user)
+
+    return current_user
+
+
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(user_id: int, db: DB, current_user: AdminUser):
     result = await db.execute(select(User).where(User.id == user_id))
@@ -152,37 +183,6 @@ async def reset_password(user_id: int, db: DB, current_user: AdminUser):
     await db.commit()
 
     return {"temp_password": temp_password}
-
-
-@router.get("/me", response_model=UserResponse)
-async def get_me(db: DB, current_user: User = Depends(get_current_user)):
-    return current_user
-
-
-@router.patch("/me", response_model=UserResponse)
-async def update_me(
-    data: UserUpdate,
-    db: DB,
-    current_user: User = Depends(get_current_user),
-):
-    # Проверка: пользователь может редактировать только себя
-    update_data = data.model_dump(exclude_unset=True)
-    
-    # Нельзя изменить роль через этот метод
-    if "role" in update_data:
-        del update_data["role"]
-    
-    # Нельзя изменить is_active через этот метод
-    if "is_active" in update_data:
-        del update_data["is_active"]
-
-    for field, value in update_data.items():
-        setattr(current_user, field, value)
-
-    await db.commit()
-    await db.refresh(current_user)
-
-    return current_user
 
 
 class ChangePasswordRequest(BaseModel):
