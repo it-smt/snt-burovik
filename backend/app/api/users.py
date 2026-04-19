@@ -95,7 +95,7 @@ async def update_me(
     current_user: User = Depends(get_current_user),
 ):
     # Проверка: пользователь может редактировать только себя
-    update_data = data.model_dump(exclude_unset=True)
+    update_data = data.model_dump(exclude_unset=True, exclude_none=True)
     
     # Нельзя изменить роль через этот метод
     if "role" in update_data:
