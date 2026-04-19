@@ -5,6 +5,8 @@ from datetime import date
 
 from app.api.deps import DB, CurrentUser, StaffUser
 from app.models.announcement import Announcement
+from app.models.activity import ActivityAction
+from app.utils.activity_logger import log_activity
 from app.schemas.announcement import AnnouncementCreate, AnnouncementResponse
 from app.schemas.common import PaginatedResponse
 
@@ -76,6 +78,17 @@ async def create_announcement(
     await db.commit()
     await db.refresh(announcement)
 
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.CREATE,
+        entity_type="announcement",
+        entity_id=announcement.id,
+        entity_name=announcement.title,
+        details=f"Создано объявление: {announcement.title}",
+    )
+
     return announcement
 
 
@@ -96,5 +109,20 @@ async def delete_announcement(
             detail="Объявление не найдено",
         )
 
+    # Store info for logging before deletion
+    announcement_title = announcement.title
+    announcement_id_for_log = announcement.id
+
     await db.delete(announcement)
     await db.commit()
+
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.DELETE,
+        entity_type="announcement",
+        entity_id=announcement_id_for_log,
+        entity_name=announcement_title,
+        details=f"Удалено объявление: {announcement_title}",
+    )

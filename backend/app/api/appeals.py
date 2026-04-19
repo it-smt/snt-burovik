@@ -7,6 +7,8 @@ from app.api.deps import DB, CurrentUser, StaffUser
 from app.models.appeal import Appeal, AppealStatus
 from app.models.plot import Plot
 from app.models.user import UserRole
+from app.models.activity import ActivityAction
+from app.utils.activity_logger import log_activity
 from app.schemas.appeal import AppealCreate, AppealResponse, AppealRespond
 from app.schemas.common import PaginatedResponse
 from pydantic import BaseModel
@@ -149,6 +151,17 @@ async def respond_appeal(
     await db.commit()
     await db.refresh(appeal)
 
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.RESPOND,
+        entity_type="appeal",
+        entity_id=appeal.id,
+        entity_name=f"Обращение #{appeal.id}",
+        details=f"Ответ на обращение: статус {data.status.value}",
+    )
+
     return appeal
 
 
@@ -167,8 +180,22 @@ async def delete_appeal(
             detail="Обращение не найдено",
         )
 
+    # Store info for logging before deletion
+    appeal_id_for_log = appeal.id
+
     await db.delete(appeal)
     await db.commit()
+
+    # Log activity
+    await log_activity(
+        db=db,
+        user_id=current_user.id,
+        action=ActivityAction.DELETE,
+        entity_type="appeal",
+        entity_id=appeal_id_for_log,
+        entity_name=f"Обращение #{appeal_id_for_log}",
+        details=f"Удалено обращение #{appeal_id_for_log}",
+    )
 
 
 @router.get("/{appeal_id}", response_model=AppealResponse)
