@@ -11,6 +11,7 @@ const auth = useAuthStore();
 onMounted(() => {
   if (auth.token) {
     auth.fetchUser();
+    auth.fetchOrganization();
   }
 });
 </script>
