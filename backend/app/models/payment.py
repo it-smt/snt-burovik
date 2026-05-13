@@ -1,6 +1,6 @@
 # app/models/payment.py
 
-from sqlalchemy import String, Numeric, ForeignKey, DateTime, Date, Enum as SQLEnum
+from sqlalchemy import String, Numeric, ForeignKey, DateTime, Date, Enum as SQLEnum, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from typing import TYPE_CHECKING, Optional
@@ -21,6 +21,18 @@ class PaymentMethod(str, enum.Enum):
     QR = "qr"
 
 
+# Промежуточная таблица для связи многие-ко-многим
+payment_allocation = Table(
+    "payment_allocations",
+    Base.metadata,
+    Column("id", primary_key=True),
+    Column("payment_id", ForeignKey("payments.id", ondelete="CASCADE"), nullable=False, index=True),
+    Column("charge_id", ForeignKey("charges.id", ondelete="CASCADE"), nullable=False, index=True),
+    Column("amount", Numeric(10, 2), nullable=False),
+    Column("created_at", DateTime(timezone=True), server_default=func.now()),
+)
+
+
 class Charge(Base):
     __tablename__ = "charges"
 
@@ -35,6 +47,40 @@ class Charge(Base):
     # Relationships
     plot: Mapped["Plot"] = relationship("Plot", back_populates="charges")
     tariff: Mapped["Tariff"] = relationship("Tariff")
+    # Связь с оплатами через промежуточную таблицу
+    allocations: Mapped[list["PaymentAllocation"]] = relationship(
+        "PaymentAllocation", back_populates="charge", cascade="all, delete-orphan"
+    )
+
+    @property
+    def paid_amount(self) -> float:
+        """Сумма, уже оплаченная по этому начислению"""
+        return sum(alloc.amount for alloc in self.allocations)
+
+    @property
+    def remaining_amount(self) -> float:
+        """Остаток к оплате"""
+        return self.amount - self.paid_amount
+
+    @property
+    def is_fully_paid(self) -> bool:
+        """Полностью ли оплачено"""
+        return self.paid_amount >= self.amount
+
+
+class PaymentAllocation(Base):
+    """Распределение оплаты по начислениям"""
+    __tablename__ = "payment_allocations_detail"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    payment_id: Mapped[int] = mapped_column(ForeignKey("payments.id", ondelete="CASCADE"), nullable=False)
+    charge_id: Mapped[int] = mapped_column(ForeignKey("charges.id", ondelete="CASCADE"), nullable=False)
+    amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    payment: Mapped["Payment"] = relationship("Payment", back_populates="allocations")
+    charge: Mapped["Charge"] = relationship("Charge", back_populates="allocations")
 
 
 class Payment(Base):
@@ -52,3 +98,17 @@ class Payment(Base):
 
     # Relationships
     plot: Mapped["Plot"] = relationship("Plot", back_populates="payments")
+    # Распределения этой оплаты
+    allocations: Mapped[list["PaymentAllocation"]] = relationship(
+        "PaymentAllocation", back_populates="payment", cascade="all, delete-orphan"
+    )
+
+    @property
+    def allocated_amount(self) -> float:
+        """Сумма, уже распределённая по начислениям"""
+        return sum(alloc.amount for alloc in self.allocations)
+
+    @property
+    def unallocated_amount(self) -> float:
+        """Не распределённый остаток оплаты"""
+        return self.amount - self.allocated_amount
