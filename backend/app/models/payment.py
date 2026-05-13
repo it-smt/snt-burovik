@@ -1,6 +1,6 @@
 # app/models/payment.py
 
-from sqlalchemy import String, Numeric, ForeignKey, DateTime, Date, Enum as SQLEnum, Table, Column
+from sqlalchemy import String, Numeric, ForeignKey, DateTime, Date, Enum as SQLEnum, Table, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from typing import TYPE_CHECKING, Optional
@@ -25,7 +25,7 @@ class PaymentMethod(str, enum.Enum):
 payment_allocation = Table(
     "payment_allocations",
     Base.metadata,
-    Column("id", primary_key=True),
+    Column("id", Integer, primary_key=True),
     Column("payment_id", ForeignKey("payments.id", ondelete="CASCADE"), nullable=False, index=True),
     Column("charge_id", ForeignKey("charges.id", ondelete="CASCADE"), nullable=False, index=True),
     Column("amount", Numeric(10, 2), nullable=False),
