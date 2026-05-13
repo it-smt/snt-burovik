@@ -45,18 +45,6 @@ export interface Tariff {
   effective_to?: string;
 }
 
-export interface Charge {
-  id: number;
-  plot_id: number;
-  plot?: Plot;
-  tariff_id: number;
-  tariff?: Tariff;
-  period: string; // "2025-01"
-  amount: number;
-  description: string;
-  created_at: string;
-}
-
 export interface Payment {
   id: number;
   plot_id: number;
@@ -68,6 +56,35 @@ export interface Payment {
   description: string;
   recorded_by: number;
   created_at: string;
+  // Информация о распределении
+  allocated_amount?: number;
+  unallocated_amount?: number;
+  allocations?: PaymentAllocation[];
+}
+
+export interface PaymentAllocation {
+  id: number;
+  payment_id: number;
+  charge_id: number;
+  amount: number;
+  created_at: string;
+}
+
+export interface Charge {
+  id: number;
+  plot_id: number;
+  plot?: Plot;
+  tariff_id: number;
+  tariff?: Tariff;
+  period: string; // "2025-01"
+  amount: number;
+  description: string;
+  created_at: string;
+  // Информация об оплате
+  paid_amount?: number;
+  remaining_amount?: number;
+  is_fully_paid?: boolean;
+  allocations?: PaymentAllocation[];
 }
 
 export interface Announcement {
